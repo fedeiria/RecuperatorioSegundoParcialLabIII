@@ -60,16 +60,6 @@ var General;
     }
     General.newRow = newRow;
     /**
-    * Recorre los datos del objeto JSON para ir formando la tabla
-    * @param {*} jsonObject
-    */
-    function loadJsonObjectToHtml(jsonObject) {
-        for (var i = 0; i < jsonObject.length; i++) {
-            newRow(jsonObject[i]);
-        }
-    }
-    General.loadJsonObjectToHtml = loadJsonObjectToHtml;
-    /**
      * Comprueba que se completen todos los campos del formulario y llama a las funciones para agregar un nuevo cliente en la lista y en la tabla de index.html
      */
     function newPerson() {
@@ -98,6 +88,7 @@ var General;
      * @param id
      */
     function newCustomer(id) {
+        var sex;
         var value = false;
         var nombre = document.getElementById('nombre');
         var apellido = document.getElementById('apellido');
@@ -106,9 +97,16 @@ var General;
         if (General.validString(nombre.value)) {
             if (General.validString(apellido.value)) {
                 if (General.validNumber(edad.value)) {
-                    var customer = new General.Cliente(id, nombre.value, apellido.value, Number.parseInt(edad.value), sexo.value);
-                    listaClientes.push(customer);
-                    value = true;
+                    if (sexo.value == "1") {
+                        var customer = new General.Cliente(id, nombre.value, apellido.value, Number.parseInt(edad.value), sex = General.ESexo.Masculino);
+                        listaClientes.push(customer);
+                        value = true;
+                    }
+                    else {
+                        var customer = new General.Cliente(id, nombre.value, apellido.value, Number.parseInt(edad.value), sex = General.ESexo.Femenino);
+                        listaClientes.push(customer);
+                        value = true;
+                    }
                 }
                 else {
                     document.getElementById("edad").className = "error";
@@ -213,26 +211,38 @@ var General;
         inputNombre.value = trClick.childNodes[1].textContent;
         inputApellido.value = trClick.childNodes[2].textContent;
         inputEdad.value = trClick.childNodes[3].textContent;
-        inputSexo.value = trClick.childNodes[4].textContent;
+        var value = trClick.childNodes[4].textContent;
+        if (value == "Masculino") {
+            inputSexo.value = "1";
+        }
+        else {
+            inputSexo.value = "2";
+        }
     }
     General.showInfoRow = showInfoRow;
     /**
-     * Elimina los datos de la tabla
+     * Elimina los datos de la tabla en index.html y el array
      */
     function clearTable() {
         document.getElementById('limpiar-tabla').addEventListener('click', function () {
-            var bodyTable = document.querySelector('tbody');
-            bodyTable.innerHTML = "";
-            listaClientes.filter(function (item) {
-                if (item.getId() > 0) {
-                    listaClientes.splice(item.getId() - 1, 1);
-                }
-            });
+            if (confirm("Esta seguro que desea limpiar la tabla?")) {
+                loadPromise().then(function () {
+                    var bodyTable = document.querySelector('tbody');
+                    bodyTable.innerHTML = "";
+                    listaClientes.filter(function (item) {
+                        if (item.getId() > 0) {
+                            listaClientes.splice(item.getId() - 1, listaClientes.length);
+                        }
+                    });
+                })["catch"](function () {
+                    alert("Se produjo un error en el servidor. No se pudo procesar la informacion.");
+                });
+            }
         });
     }
     General.clearTable = clearTable;
     /**
-     * Elimina los datos de la tabla en index.html
+     * Elimina solo los datos de la tabla en index.html
      */
     function deleteTable() {
         var bodyTable = document.querySelector('tbody');
@@ -244,7 +254,7 @@ var General;
      */
     function filterByMale() {
         var male = listaClientes.filter(function (item) {
-            return item.getSexo() == "Masculino";
+            return item.getSexo() == General.ESexo.Masculino;
         });
         deleteTable();
         loadPromise().then(function () {
@@ -261,7 +271,7 @@ var General;
      */
     function filterByFemale() {
         var female = listaClientes.filter(function (item) {
-            return item.getSexo() == "Femenino";
+            return item.getSexo() == General.ESexo.Femenino;
         });
         deleteTable();
         loadPromise().then(function () {
@@ -295,6 +305,7 @@ var General;
         var optionNombre = document.getElementById('nombre-filter');
         var optionApellido = document.getElementById('apellido-filter');
         var optionEdad = document.getElementById('edad-filter');
+        // checkbox ID
         optionId.addEventListener('click', function () {
             var radioId = document.getElementsByName('tdId');
             if (optionId.checked) {
@@ -310,6 +321,7 @@ var General;
                 });
             }
         });
+        // checkbox Nombre
         optionNombre.addEventListener('click', function () {
             var radioMarca = document.getElementsByName('tdNombre');
             if (optionNombre.checked) {
@@ -325,6 +337,7 @@ var General;
                 });
             }
         });
+        // checkbox Apellido
         optionApellido.addEventListener('click', function () {
             var radioModelo = document.getElementsByName('tdApellido');
             if (optionApellido.checked) {
@@ -340,6 +353,7 @@ var General;
                 });
             }
         });
+        // checkbox Edad
         optionEdad.addEventListener('click', function () {
             var radioPrecio = document.getElementsByName('tdEdad');
             if (optionEdad.checked) {

@@ -71,16 +71,6 @@ namespace General {
     }
 
     /**
-    * Recorre los datos del objeto JSON para ir formando la tabla
-    * @param {*} jsonObject 
-    */
-    export function loadJsonObjectToHtml(jsonObject) {
-        for (var i = 0; i < jsonObject.length; i++) {
-            newRow(jsonObject[i]);
-        }
-    }
-
-    /**
      * Comprueba que se completen todos los campos del formulario y llama a las funciones para agregar un nuevo cliente en la lista y en la tabla de index.html
      */
     export function newPerson() {
@@ -112,6 +102,7 @@ namespace General {
      * @param id 
      */
     export function newCustomer(id: number): boolean {
+        let sex: General.ESexo;
         let value: boolean = false;
         let nombre = <HTMLInputElement>document.getElementById('nombre');
         let apellido = <HTMLInputElement>document.getElementById('apellido');
@@ -121,9 +112,16 @@ namespace General {
         if (General.validString(nombre.value)) {
             if (General.validString(apellido.value)) {
                 if (General.validNumber(edad.value)) {
-                    let customer: General.Cliente = new General.Cliente(id, nombre.value, apellido.value, Number.parseInt(edad.value), sexo.value);
-                    listaClientes.push(customer);
-                    value = true;
+                    if (sexo.value == "1") {
+                        let customer: General.Cliente = new General.Cliente(id, nombre.value, apellido.value, Number.parseInt(edad.value), sex = General.ESexo.Masculino);
+                        listaClientes.push(customer);
+                        value = true;
+                    }
+                    else {
+                        let customer: General.Cliente = new General.Cliente(id, nombre.value, apellido.value, Number.parseInt(edad.value), sex = General.ESexo.Femenino);
+                        listaClientes.push(customer);
+                        value = true;
+                    }
                 }
                 else {
                     document.getElementById("edad").className = "error";
@@ -233,27 +231,41 @@ namespace General {
         inputNombre.value = trClick.childNodes[1].textContent;
         inputApellido.value = trClick.childNodes[2].textContent;
         inputEdad.value = trClick.childNodes[3].textContent;
-        inputSexo.value = trClick.childNodes[4].textContent;
+        let value = trClick.childNodes[4].textContent;
+
+        if (value == "Masculino") {
+            inputSexo.value = "1";
+        }
+        else {
+            inputSexo.value = "2";
+        }
     }
 
     /**
-     * Elimina los datos de la tabla
+     * Elimina los datos de la tabla en index.html y el array
      */
     export function clearTable() {
         document.getElementById('limpiar-tabla').addEventListener('click', function() {
-            let bodyTable = document.querySelector('tbody');
-            bodyTable.innerHTML = "";
 
-            listaClientes.filter(item => {
-                if (item.getId() > 0) {
-                    listaClientes.splice(item.getId() -1, 1);
-                }
-            });
+            if (confirm("Esta seguro que desea limpiar la tabla?")) {
+                loadPromise().then(() => {
+                    let bodyTable = document.querySelector('tbody');
+                    bodyTable.innerHTML = "";
+        
+                    listaClientes.filter(item => {
+                        if (item.getId() > 0) {
+                            listaClientes.splice(item.getId() -1, listaClientes.length);
+                        }
+                    });
+                }).catch(() => {
+                    alert("Se produjo un error en el servidor. No se pudo procesar la informacion.");
+                });
+            }
         });
     }
     
     /**
-     * Elimina los datos de la tabla en index.html
+     * Elimina solo los datos de la tabla en index.html
      */
     export function deleteTable() {
         let bodyTable = document.querySelector('tbody');
@@ -265,7 +277,7 @@ namespace General {
      */
     export function filterByMale() {
         let male = listaClientes.filter(function(item) {
-            return item.getSexo() == "Masculino";
+            return item.getSexo() == General.ESexo.Masculino;
         });
 
         deleteTable();
@@ -284,7 +296,7 @@ namespace General {
      */
     export function filterByFemale() {
         let female = listaClientes.filter(function(item) {
-            return item.getSexo() == "Femenino";
+            return item.getSexo() == General.ESexo.Femenino;
         });
 
         deleteTable();
@@ -322,6 +334,7 @@ namespace General {
         let optionApellido = <HTMLInputElement>document.getElementById('apellido-filter');
         let optionEdad = <HTMLInputElement>document.getElementById('edad-filter');
 
+        // checkbox ID
         optionId.addEventListener('click', function() {
             let radioId = document.getElementsByName('tdId');
 
@@ -339,6 +352,7 @@ namespace General {
             }
         });
 
+        // checkbox Nombre
         optionNombre.addEventListener('click', function() {
             let radioMarca = document.getElementsByName('tdNombre');
 
@@ -356,7 +370,7 @@ namespace General {
             }
         });
         
-
+        // checkbox Apellido
         optionApellido.addEventListener('click', function() {
             let radioModelo = document.getElementsByName('tdApellido');
 
@@ -374,7 +388,7 @@ namespace General {
             }
         });
         
-
+        // checkbox Edad
         optionEdad.addEventListener('click', function() {
             let radioPrecio = document.getElementsByName('tdEdad');
 

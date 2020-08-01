@@ -32,16 +32,7 @@ var General;
          * Setea el sexo del cliente
          */
         Cliente.prototype.setSexo = function (sexo) {
-            switch (sexo) {
-                case 'Masculino': {
-                    this.sexo = ESexo.Masculino;
-                    break;
-                }
-                case 'femenino': {
-                    this.sexo = ESexo.Femenino;
-                    break;
-                }
-            }
+            return this.sexo = sexo;
         };
         /**
          * Retorna la edad del cliente.
@@ -53,12 +44,7 @@ var General;
          * Retorna el sexo del cliente
          */
         Cliente.prototype.getSexo = function () {
-            if (this.sexo == 0) {
-                return "Masculino";
-            }
-            else {
-                return "Femenino";
-            }
+            return this.sexo;
         };
         return Cliente;
     }(General.Persona));

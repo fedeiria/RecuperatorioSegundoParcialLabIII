@@ -3,7 +3,7 @@ namespace General {
         private edad: number;
         private sexo: ESexo;
     
-        constructor(id: number, nombre: string, apellido: string, edad: number, sexo: string) {
+        constructor(id: number, nombre: string, apellido: string, edad: number, sexo: ESexo) {
             super(id, nombre, apellido);
             this.edad = this.setEdad(edad);
             this.setSexo(sexo);
@@ -20,17 +20,8 @@ namespace General {
         /**
          * Setea el sexo del cliente
          */
-        public setSexo(sexo: string): void {
-            switch(sexo) {
-                case 'Masculino': {
-                    this.sexo = ESexo.Masculino;
-                    break;
-                }
-                case 'femenino': {
-                    this.sexo = ESexo.Femenino;
-                    break;
-                }
-            }
+        public setSexo(sexo: ESexo): ESexo {
+            return this.sexo = sexo;
         }
 
         /**
@@ -43,13 +34,8 @@ namespace General {
         /**
          * Retorna el sexo del cliente
          */
-        public getSexo(): string {
-            if (this.sexo == 0) {
-                return "Masculino";
-            }
-            else {
-                return "Femenino";
-            }
+        public getSexo(): ESexo {
+            return this.sexo;
         }
     }
 }
