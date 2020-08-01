@@ -1,0 +1,248 @@
+form {
+    box-sizing: border-box;
+    display: flex;
+}
+
+#close-btn {
+    background-image: url('../img/close.jpg');
+    background-repeat: repeat;
+    border-radius: 6px;
+    cursor: pointer;
+    float: right;
+    height: 25px;
+    width: 25px;
+}
+
+#openForm {
+    background-color: rgb(110, 179, 113);
+    border: none;
+    border-radius: 3px;
+    box-sizing: border-box;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    margin: 10px 0;
+    padding: 25px;
+    width: max-content;
+}
+
+#busqueda {
+    border-radius: 4px;
+    font-size: 15px;
+    float: right;
+    margin: 7px, 0px;
+    margin-top: 20px;
+    padding: 15px;
+    width: 25%;
+}
+
+#openForm:hover {
+    background-color: rgb(21, 138, 132);
+}
+
+#addFormDataButton {
+    background-color: rgb(110, 179, 113);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    margin: 7px 0;
+    padding: 15px;
+    width: 100%;
+}
+
+#addFormDataButton:hover {
+    background-color: rgb(56, 112, 114);
+}
+
+#modifyFormDataButton {
+    background-color: rgb(110, 179, 113);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    margin: 7px 0;
+    padding: 15px;
+    width: 100%;
+}
+
+#modifyFormDataButton:hover {
+    background-color: rgb(56, 112, 114);
+}
+
+#deleteFormDataButton {
+    background-color: rgb(160, 6, 6);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    margin: 7px 0;
+    padding: 15px;
+    width: 100%;
+}
+
+#deleteFormDataButton:hover {
+    background-color: rgb(63, 1, 1);
+}
+
+#loading {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('../img/giphy.gif') 50% 50% no-repeat white;
+    opacity: 0.4;
+    color: transparent;
+}
+
+.container {
+    animation-duration: 2s;
+    animation-name: showForm;
+    background-color: rgb(21, 138, 132);
+    border-radius: 4px;
+    box-shadow: 20px 20px 10px 0px rgba(0, 0, 0, 0.5);
+    left: 50%;
+    padding: 40px;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+}
+
+@keyframes showForm {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+label {
+    font-size: 20px;
+    padding: 0;
+}
+
+#id, #nombre, #apellido, #edad, #sexo {
+    width: 100%;
+    margin: 7px 0px;
+    margin-bottom: 25px;
+    padding: 12px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#buscar {
+    width: 12%;
+    margin: 7px 0px;
+    margin-bottom: 25px;
+    padding: 12px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#filtro-personas {
+    width: 20%;
+    margin: 7px 0px;
+    margin-left: 10px;
+    margin-bottom: 25px;
+    padding: 12px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 15px;
+    text-align-last: center;
+}
+
+#edad-promedio {
+    width: 10%;
+    margin: 7px 0px;
+    margin-left: 170px;
+    margin-bottom: 25px;
+    padding: 12px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#calcula-promedio {
+    background-color: rgb(67, 136, 226);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    margin: 7px 0;
+    margin-left: 100px;
+    padding: 12px;
+    width: 15%;
+    float: right;
+}
+
+#limpiar-tabla {
+    background-color: rgb(194, 16, 16);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    margin-bottom: 10px;
+    margin-top: -35px;
+    padding: 12px;
+    width: 15%;
+    float: right;
+}
+
+#accion {
+    background-color: rgb(160, 6, 6);
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 12px;
+    width: 70%;
+}
+
+#saveFormDataButton:hover {
+    background-color: rgb(56, 112, 114);
+}
+
+h2 {
+    background: rgb(21, 138, 132);
+    color: white;
+    margin: 20px 0 10px;
+    text-align: center;
+    font-size: 30px;
+    padding: 10px;
+    width: initial;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+}
+
+th {
+    color: white;
+    background-color: rgb(21, 138, 132);
+    padding: 10px;
+    font-size: 25px;
+}
+
+td {
+    cursor: pointer;
+    font-size: 20px;
+    text-align: center;
+    padding: 8px;
+}
+
+tr:nth-child(odd){background-color: rgb(219, 207, 185);}
+
+.error {
+    border: 1px solid red
+}
+
+.noError {
+    border: 1px solid #cccccc;
+}
