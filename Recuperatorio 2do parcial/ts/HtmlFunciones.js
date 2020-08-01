@@ -223,6 +223,11 @@ var General;
         document.getElementById('limpiar-tabla').addEventListener('click', function () {
             var bodyTable = document.querySelector('tbody');
             bodyTable.innerHTML = "";
+            listaClientes.filter(function (item) {
+                if (item.getId() > 0) {
+                    listaClientes.splice(item.getId() - 1, 1);
+                }
+            });
         });
     }
     General.clearTable = clearTable;
@@ -232,11 +237,6 @@ var General;
     function deleteTable() {
         var bodyTable = document.querySelector('tbody');
         bodyTable.innerHTML = "";
-        listaClientes.filter(function (item) {
-            if (item.getId() > 0) {
-                listaClientes.splice(0, listaClientes.length);
-            }
-        });
     }
     General.deleteTable = deleteTable;
     /**

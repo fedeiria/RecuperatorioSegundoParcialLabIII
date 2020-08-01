@@ -243,6 +243,12 @@ namespace General {
         document.getElementById('limpiar-tabla').addEventListener('click', function() {
             let bodyTable = document.querySelector('tbody');
             bodyTable.innerHTML = "";
+
+            listaClientes.filter(item => {
+                if (item.getId() > 0) {
+                    listaClientes.splice(item.getId() -1, 1);
+                }
+            });
         });
     }
     
@@ -252,12 +258,6 @@ namespace General {
     export function deleteTable() {
         let bodyTable = document.querySelector('tbody');
         bodyTable.innerHTML = "";
-
-        listaClientes.filter(item => {
-            if (item.getId() > 0) {
-                listaClientes.splice(0, listaClientes.length);
-            }
-        });
     }
 
     /**
