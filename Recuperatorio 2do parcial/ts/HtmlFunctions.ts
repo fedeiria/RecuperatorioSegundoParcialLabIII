@@ -614,8 +614,6 @@ namespace General {
             showForm();
             let nextId = findNextId() + 1;
             inputId.value = nextId.toString();
-
-            console.log(arrayCustomers);
         }
         else {
             hideForm();
