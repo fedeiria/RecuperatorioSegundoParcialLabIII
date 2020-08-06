@@ -76,7 +76,7 @@ var General;
         var age = document.getElementById('age');
         var sex = document.getElementById('sex');
         var enumSex;
-        if (validateFormData(name.value, surname.value, age.value, sex.value)) {
+        if (validateFormData(name.value, surname.value, age.value)) {
             if (confirm("¿Esta seguro que desea agregar un nuevo cliente?")) {
                 if (sex.value == "1") {
                     var data = { id: id, name: name.value, surname: surname.value, age: age.value, sex: "Masculino" };
@@ -116,8 +116,7 @@ var General;
         var surname = document.getElementById('surname');
         var age = document.getElementById('age');
         var sex = document.getElementById('sex');
-        console.log("Sexo: " + sex.value);
-        if (validateFormData(name.value, surname.value, age.value, sex.value)) {
+        if (validateFormData(name.value, surname.value, age.value)) {
             if (confirm("¿Esta seguro que desea modificar el cliente?")) {
                 if (sex.value == "1") {
                     var data = { id: id, name: name.value, surname: surname.value, age: Number.parseInt(age.value), sex: 0 };
@@ -195,9 +194,8 @@ var General;
      * @param name
      * @param surname
      * @param age
-     * @param sex
      */
-    function validateFormData(name, surname, age, sex) {
+    function validateFormData(name, surname, age) {
         var value = false;
         if (General.validString(name)) {
             if (General.validString(surname)) {
@@ -253,7 +251,7 @@ var General;
      * @param {*} event
      */
     function doubleClickRow(event) {
-        document.getElementById('container').hidden = false;
+        showForm();
         document.getElementById('addFormDataButton').hidden = true;
         document.getElementById('modifyFormDataButton').hidden = false;
         trClick = event.target.parentNode;
@@ -312,8 +310,9 @@ var General;
             return item.getSex() == General.ESex.Male;
         });
         if (male.length != 0) {
-            deleteTable();
             loadSpinner().then(function () {
+                deleteTable();
+                enableCheckboxOptions();
                 male.forEach(function (item) {
                     var newMaleRow = { id: item.getId(), name: item.getName(), surname: item.getSurname(), age: item.getAge(), sex: "Masculino" };
                     newRow(newMaleRow);
@@ -335,8 +334,9 @@ var General;
             return item.getSex() == General.ESex.Female;
         });
         if (female.length != 0) {
-            deleteTable();
             loadSpinner().then(function () {
+                deleteTable();
+                enableCheckboxOptions();
                 female.forEach(function (item) {
                     var newFemaleRow = { id: item.getId(), name: item.getName(), surname: item.getSurname(), age: item.getAge(), sex: "Femenino" };
                     newRow(newFemaleRow);
@@ -355,8 +355,9 @@ var General;
      */
     function filterAll() {
         if (arrayCustomers.length != 0) {
-            deleteTable();
             loadSpinner().then(function () {
+                deleteTable();
+                enableCheckboxOptions();
                 arrayCustomers.forEach(function (item) {
                     if (item.getSex() == General.ESex.Male) {
                         var newMaleRow = { id: item.getId(), name: item.getName(), surname: item.getSurname(), age: item.getAge(), sex: "Masculino" };
@@ -469,6 +470,32 @@ var General;
     }
     General.filterBySex = filterBySex;
     /**
+     * Tilda los checkboxs deshabilitados
+     */
+    function enableCheckboxOptions() {
+        var optionName = document.getElementById('name-filter');
+        var optionSurname = document.getElementById('surname-filter');
+        var optionAge = document.getElementById('age-filter');
+        var optionSex = document.getElementById('sex-filter');
+        if (!optionName.checked) {
+            optionName.checked = true;
+            document.getElementById('thName').hidden = false;
+        }
+        if (!optionSurname.checked) {
+            optionSurname.checked = true;
+            document.getElementById('thSurname').hidden = false;
+        }
+        if (!optionAge.checked) {
+            optionAge.checked = true;
+            document.getElementById('thAge').hidden = false;
+        }
+        if (!optionSex.checked) {
+            optionSex.checked = true;
+            document.getElementById('thSex').hidden = false;
+        }
+    }
+    General.enableCheckboxOptions = enableCheckboxOptions;
+    /**
      * Evento clic del boton 'calcula-promedio' llama a la funcion 'averagePrice'
      */
     function buttonAveragePrice() {
@@ -512,6 +539,7 @@ var General;
      */
     function showForm() {
         document.getElementById('container').hidden = false;
+        document.getElementById('lock-background').hidden = false;
     }
     General.showForm = showForm;
     /**
@@ -519,6 +547,7 @@ var General;
      */
     function hideForm() {
         document.getElementById('container').hidden = true;
+        document.getElementById('lock-background').hidden = true;
     }
     General.hideForm = hideForm;
     /**
@@ -535,20 +564,17 @@ var General;
      */
     function changeLabelNewCustomerForm() {
         var visibleForm = document.getElementById('container').hidden;
-        var addFormLabel = document.getElementById('openForm');
         inputId = document.getElementById('id');
         if (visibleForm == true) {
-            console.log(arrayCustomers);
             showForm();
             var nextId = findNextId() + 1;
             inputId.value = nextId.toString();
-            addFormLabel.value = "Cerrar formulario";
+            console.log(arrayCustomers);
         }
         else {
             hideForm();
             clearTextBoxForm();
             clearBorderTextBoxForm();
-            addFormLabel.value = "Nuevo cliente";
         }
     }
     General.changeLabelNewCustomerForm = changeLabelNewCustomerForm;

@@ -89,7 +89,7 @@ namespace General {
         let sex = <HTMLInputElement>document.getElementById('sex');
         let enumSex: General.ESex;
 
-        if (validateFormData(name.value, surname.value, age.value, sex.value)) {
+        if (validateFormData(name.value, surname.value, age.value)) {
             if (confirm("¿Esta seguro que desea agregar un nuevo cliente?")) {
                 if (sex.value == "1") {
                     let data = { id:id, name:name.value, surname:surname.value, age:age.value, sex:"Masculino" };
@@ -131,9 +131,7 @@ namespace General {
         let age = <HTMLInputElement>document.getElementById('age');
         let sex = <HTMLInputElement>document.getElementById('sex');
 
-        console.log("Sexo: " + sex.value);
-
-        if (validateFormData(name.value, surname.value, age.value, sex.value)) {
+        if (validateFormData(name.value, surname.value, age.value)) {
             if (confirm("¿Esta seguro que desea modificar el cliente?")) {
                 if (sex.value == "1") {
                     let data = { id:id, name:name.value, surname:surname.value, age:Number.parseInt(age.value), sex:0 };
@@ -204,6 +202,7 @@ namespace General {
                 let index = Number.parseInt(trClick.childNodes[0].textContent);
                 removeCustomer(index);
                 trClick.remove();
+
             }).catch(() => {
                 alert("Se produjo un error en el servidor. No se pudo procesar la informacion.");
             });
@@ -215,9 +214,8 @@ namespace General {
      * @param name 
      * @param surname 
      * @param age 
-     * @param sex 
      */
-    export function validateFormData(name:string, surname: string, age:string, sex: string): boolean {
+    export function validateFormData(name:string, surname: string, age:string): boolean {
         let value: boolean = false;
         
         if (General.validString(name)) {
@@ -277,7 +275,7 @@ namespace General {
      * @param {*} event 
      */
     export function doubleClickRow(event) {
-        document.getElementById('container').hidden = false;
+        showForm();
         document.getElementById('addFormDataButton').hidden = true;
         document.getElementById('modifyFormDataButton').hidden = false;
 
@@ -342,8 +340,9 @@ namespace General {
         });
 
         if (male.length != 0) {
-            deleteTable();
             loadSpinner().then(() => {
+                deleteTable();
+                enableCheckboxOptions();
                 male.forEach(item => {
                     let newMaleRow = {id:item.getId(), name:item.getName(), surname:item.getSurname(), age:item.getAge(), sex:"Masculino" };
                     newRow(newMaleRow);
@@ -366,8 +365,9 @@ namespace General {
         });
 
         if (female.length != 0) {
-            deleteTable();
             loadSpinner().then(() => {
+                deleteTable();
+                enableCheckboxOptions();
                 female.forEach(item => {
                     let newFemaleRow = {id:item.getId(), name:item.getName(), surname:item.getSurname(), age:item.getAge(), sex:"Femenino" };
                     newRow(newFemaleRow);
@@ -386,8 +386,9 @@ namespace General {
      */
     export function filterAll() {
         if (arrayCustomers.length != 0) {
-            deleteTable();
             loadSpinner().then(() => {
+                deleteTable();
+                enableCheckboxOptions();
                 arrayCustomers.forEach(item => {
                     if (item.getSex() == General.ESex.Male) {
                         let newMaleRow = {id:item.getId(), name:item.getName(), surname:item.getSurname(), age:item.getAge(), sex:"Masculino" };
@@ -509,6 +510,33 @@ namespace General {
     }
 
     /**
+     * Tilda los checkboxs deshabilitados 
+     */
+    export function enableCheckboxOptions() {
+        let optionName = <HTMLInputElement>document.getElementById('name-filter');
+        let optionSurname = <HTMLInputElement>document.getElementById('surname-filter');
+        let optionAge = <HTMLInputElement>document.getElementById('age-filter');
+        let optionSex = <HTMLInputElement>document.getElementById('sex-filter');
+
+        if (!optionName.checked) {
+            optionName.checked = true;
+            document.getElementById('thName').hidden = false;
+        }
+        if (!optionSurname.checked) {
+            optionSurname.checked = true;
+            document.getElementById('thSurname').hidden = false;
+        }
+        if (!optionAge.checked) {
+            optionAge.checked = true;
+            document.getElementById('thAge').hidden = false;
+        }
+        if (!optionSex.checked) {
+            optionSex.checked = true;
+            document.getElementById('thSex').hidden = false;
+        }
+    }
+
+    /**
      * Evento clic del boton 'calcula-promedio' llama a la funcion 'averagePrice'
      */
     export function buttonAveragePrice() {
@@ -555,6 +583,7 @@ namespace General {
      */
     export function showForm(): void {
         document.getElementById('container').hidden = false;
+        document.getElementById('lock-background').hidden = false;
     }
 
     /**
@@ -562,6 +591,7 @@ namespace General {
      */
     export function hideForm(): void {
         document.getElementById('container').hidden = true;
+        document.getElementById('lock-background').hidden = true;
     }
 
     /**
@@ -578,21 +608,19 @@ namespace General {
      */
     export function changeLabelNewCustomerForm(): void {
         let visibleForm = document.getElementById('container').hidden;
-        let addFormLabel = <HTMLInputElement>document.getElementById('openForm');
         inputId = <HTMLInputElement>document.getElementById('id');
 
         if (visibleForm == true) {
-            console.log(arrayCustomers);
             showForm();
             let nextId = findNextId() + 1;
             inputId.value = nextId.toString();
-            addFormLabel.value = "Cerrar formulario";
+
+            console.log(arrayCustomers);
         }
         else {
             hideForm();
             clearTextBoxForm();
             clearBorderTextBoxForm();
-            addFormLabel.value = "Nuevo cliente";
         }
     }
 
